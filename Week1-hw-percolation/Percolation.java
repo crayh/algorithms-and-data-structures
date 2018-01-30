@@ -4,23 +4,22 @@
  */
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
-
 
 public class Percolation{
     
-    int[][] grid;
-    int openSites;
+    private int[][] grid;
+    private int openSites = 0;
     
     /*
      * Constructor.  Creates an n-by-n "grid" via 2d array.  Java defaults 
      * element values to 0.
      */
     Percolation(int n){
-        if( n <= 0 ) { throw new IllegalArgumentException(); }
+        if( n <= 0 ) {
+        	String errMsg = "N must be greater than 0";
+        	throw new IllegalArgumentException( errMsg );
+        }
         grid = new int[n][n];
-        openSites = 0;
     }
     
     /*
@@ -46,8 +45,9 @@ public class Percolation{
     }
     
     private void checkArguments(int row, int col){
-        if( row > grid.length || col > grid.length ){ 
-           throw new IllegalArgumentException();
+        if( row > grid.length || col > grid.length ){
+        	String errMsg = "Arguments out of bounds of array.";
+            throw new IllegalArgumentException( errMsg );
         }
     }
     
@@ -60,11 +60,8 @@ public class Percolation{
      */
     public boolean percolates(){
         
+    	return true;
     }
-    
-    
-    
-    
     
     /*
      * Test client
