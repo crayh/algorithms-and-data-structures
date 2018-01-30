@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+/Users/colehalverson/Documents/LocalGit/Programming Coursework/algorithms-and-data-structures/.metadata/.plugins/org.eclipse.jdt.core
+4021163650.index
