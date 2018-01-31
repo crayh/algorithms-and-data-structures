@@ -9,6 +9,7 @@ public class Percolation{
     
     private int[][] grid;
     private int openSites = 0;
+    private WeightedQuickUnionUF wquuf;
     
     /*
      * Constructor.  Creates an n-by-n "grid" via 2d array.  Java defaults 
@@ -19,7 +20,19 @@ public class Percolation{
         	String errMsg = "N must be greater than 0";
         	throw new IllegalArgumentException( errMsg );
         }
+        
         grid = new int[n][n];
+        
+        /*
+         * Instantiate WeightedQuickUnionFind object to track connections between sites and 
+         * check for percolation.  n*n+2 sites are created to account for two virtual sites, (0)
+         * and (n+1).
+         * Sites located in the top or bottom rows of the grid are connected to the top or 
+         * bottom virtual site, respectively, upon being opened.  This method makes checking for
+         * percolation more economical.    
+         */
+        wquuf = new WeightedQuickUnionUF( n*n+2 );
+        
     }
     
     /*
