@@ -10,6 +10,8 @@ public class Percolation{
     private int[][] grid;
     private int openSites = 0;
     private WeightedQuickUnionUF wquuf;
+    private int topVirtualSite;
+    private int bottomVirtualSite;
     
     /*
      * Constructor.  Creates an n-by-n "grid" via 2d array.  Java defaults 
@@ -31,7 +33,11 @@ public class Percolation{
          * bottom virtual site, respectively, upon being opened.  This method makes checking for
          * percolation more economical.    
          */
-        wquuf = new WeightedQuickUnionUF( n*n+2 );
+        int totalSites = n*n+2;
+        wquuf = new WeightedQuickUnionUF( totalSites );
+        
+        topVirtualSite = totalSites - 1;
+        bottomVirtualSite = totalSites;
         
     }
     
@@ -43,7 +49,38 @@ public class Percolation{
         
         if( !isOpen(row, col) ){ 
             grid[row][col] = 1; 
+            
             openSites++;
+            
+            int site = getSite(row,col);
+            
+            //Connect to adjacent open sites
+            //above
+            if( row==0 ){ wquuf.union(site, topVirtualSite); }
+            else{
+            	if( isOpen(row-1, col) ){
+            		wquuf.union(site, getSite(row-1, col));
+            	}
+            }
+            //below
+            if( row==grid.length-1 ){ wquuf.union(site, bottomVirtualSite); }
+            else{
+            	if( isOpen(row+1, col) ){
+            		wquuf.union(site, getSite(row+1, col));
+            	}
+            }
+            //left
+            if( col>0 ){
+            	if( isOpen(row, col-1) ){
+            		wquuf.union(site, getSite(row, col-1));
+            	}
+            }
+            //right
+            if( col<grid.length-1 ){
+            	if( isOpen(row, col+1) ){
+            		wquuf.union(site, getSite(row, col+1));
+            	}
+            }
         }
     }
     
@@ -57,13 +94,6 @@ public class Percolation{
         return grid[row][col] == 0;
     }
     
-    private void checkArguments(int row, int col){
-        if( row > grid.length || col > grid.length ){
-        	String errMsg = "Arguments out of bounds of array.";
-            throw new IllegalArgumentException( errMsg );
-        }
-    }
-    
     public int numberOfOpenSites(){
         return openSites;
     }
@@ -72,8 +102,7 @@ public class Percolation{
      * Does the system percolate?
      */
     public boolean percolates(){
-        
-    	return true;
+        return wquuf.connected(topVirtualSite, bottomVirtualSite);
     }
     
     /*
@@ -81,9 +110,24 @@ public class Percolation{
      */
     public static void main(String[] args){
         
+    }  
+    
+    private void checkArguments(int row, int col){
+        if( row < 0 || col < 0 || row > grid.length || col > grid.length ){
+        	String errMsg = "Arguments out of bounds of array.";
+            throw new IllegalArgumentException( errMsg );
+        }
     }
     
-    
+    /**
+     * 
+     * @param row
+     * @param col
+     * @return the wquuf site corresponding to the given index in the percolation grid
+     */
+    private int getSite(int row, int col){
+    	return row*grid.length + col;
+    }
     
 }
 
