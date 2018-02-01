@@ -33,7 +33,7 @@ public class Percolation{
          * bottom virtual site, respectively, upon being opened.  This method makes checking for
          * percolation more economical.    
          */
-        int totalSites = n*n+2;
+        int totalSites = (n*n-1)+2;
         wquuf = new WeightedQuickUnionUF( totalSites );
         
         topVirtualSite = totalSites - 1;
@@ -102,7 +102,8 @@ public class Percolation{
     }
     
     /**
-     * Checks if a given site is full.
+     * Checks if a given site is full.  I believe that means the site is open and connected
+     * to the top.
      * @param row
      * @param col
      * @return
@@ -111,7 +112,12 @@ public class Percolation{
      */
     public boolean isFull(int row, int col){
         checkArguments(row, col);
-        return grid[row][col] == 0;
+        
+        if( grid[row][col] != 0 && wquuf.connected(getSite(row, col), topVirtualSite) ){
+        	return true;
+        }
+       
+        return false;
     }
     
     /**
