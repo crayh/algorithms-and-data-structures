@@ -13,9 +13,9 @@ public class Percolation{
     private int topVirtualSite;
     private int bottomVirtualSite;
     
-    /*
-     * Constructor.  Creates an n-by-n "grid" via 2d array.  Java defaults 
-     * element values to 0.
+    /**
+     * Initializes an n-by-n grid of completely full sites
+     * @param n
      */
     Percolation(int n){
         if( n <= 0 ) {
@@ -41,8 +41,12 @@ public class Percolation{
         
     }
     
-    /*
-     * Opens the site at (row, col) if not already open
+    /**
+     * Opens the given site in the system
+     * @param row
+     * @param col
+     * @throws IllegalArgumentException unless {@code 0 <= row < n} 
+     * 	or {@code 0 <= col < n}
      */
     public void open(int row, int col){
         checkArguments(row, col);
@@ -84,22 +88,43 @@ public class Percolation{
         }
     }
     
+    /**
+     * Checks if a given site is open.
+     * @param row
+     * @param col
+     * @return
+     * @throws IllegalArgumentException unless {@code 0 <= row < n} 
+     * 	or {@code 0 <= col < n}
+     */
     public boolean isOpen(int row, int col){
         checkArguments(row, col);
         return grid[row][col] == 1;
     }
     
+    /**
+     * Checks if a given site is full.
+     * @param row
+     * @param col
+     * @return
+     * @throws IllegalArgumentException unless {@code 0 <= row < n} 
+     * 	or {@code 0 <= col < n}
+     */
     public boolean isFull(int row, int col){
         checkArguments(row, col);
         return grid[row][col] == 0;
     }
     
+    /**
+     * 
+     * @return number of open sites in the system
+     */
     public int numberOfOpenSites(){
         return openSites;
     }
     
-    /*
-     * Does the system percolate?
+    /**
+     * Checks if the system percolates
+     * @return
      */
     public boolean percolates(){
         return wquuf.connected(topVirtualSite, bottomVirtualSite);
