@@ -34,11 +34,11 @@ public class PercolationStats {
     }
     
     public double confidenceLo(){
-    	return this.confidencelo;
+    	return mean() - 1.960 * (stddev() / Math.sqrt(thresholds.length));
     }
     
     public double confidenceHi(){
-    	return this.confidencehi;
+    	return mean() + 1.960 * (stddev() / Math.sqrt(thresholds.length));
     }
     
     
@@ -58,6 +58,11 @@ public class PercolationStats {
     	
     	PercolationStats percolationStats = new PercolationStats( n, trials );
     	
+    	//Print stats
+    	System.out.println("mean = " + percolationStats.mean());
+    	System.out.println("stddev = " + percolationStats.stddev());
+    	System.out.println("95% conficence interval = " + "[" + 
+    			percolationStats.confidenceLo() + ", " + percolationStats.confidenceHi() + "]");
     }
     
 }
