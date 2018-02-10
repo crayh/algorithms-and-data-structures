@@ -3,6 +3,7 @@
  * Cole Halverson
  */
 
+//import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation{
@@ -33,12 +34,15 @@ public class Percolation{
          * bottom virtual site, respectively, upon being opened.  This method makes checking for
          * percolation more economical.    
          */
-        int totalSites = (n*n-1)+2;
+        int totalSites = (n*n)+2;
         wquuf = new WeightedQuickUnionUF( totalSites );
         
-        topVirtualSite = totalSites - 1;
-        bottomVirtualSite = totalSites;
+        topVirtualSite = totalSites - 2;
+        bottomVirtualSite = totalSites - 1;
         
+        System.out.println("totalSites = " + totalSites);
+        System.out.println("topVirtualSite = " + topVirtualSite);
+        System.out.println("bottomVirtualSite = " + bottomVirtualSite);
     }
     
     /**
