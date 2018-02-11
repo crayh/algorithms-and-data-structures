@@ -6,20 +6,20 @@
 //import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-public class Percolation{
+public class Percolation {
     
     private int[][] grid;
     private int openSites = 0;
-    private WeightedQuickUnionUF wquuf;
-    private int topVirtualSite;
-    private int bottomVirtualSite;
+    private final WeightedQuickUnionUF wquuf;
+    private final int topVirtualSite;
+    private final int bottomVirtualSite;
     
     /**
      * Initializes an n-by-n grid of completely full sites
      * @param n
      */
-    Percolation(int n){
-        if( n <= 0 ) {
+    public Percolation(int n) {
+        if(n <= 0) {
         	String errMsg = "N must be greater than 0";
         	throw new IllegalArgumentException( errMsg );
         }
@@ -35,14 +35,10 @@ public class Percolation{
          * percolation more economical.    
          */
         int totalSites = (n*n)+2;
-        wquuf = new WeightedQuickUnionUF( totalSites );
+        wquuf = new WeightedQuickUnionUF(totalSites);
         
         topVirtualSite = totalSites - 2;
         bottomVirtualSite = totalSites - 1;
-        
-        System.out.println("totalSites = " + totalSites);
-        System.out.println("topVirtualSite = " + topVirtualSite);
-        System.out.println("bottomVirtualSite = " + bottomVirtualSite);
     }
     
     /**
@@ -53,9 +49,11 @@ public class Percolation{
      * 	or {@code 0 <= col < n}
      */
     public void open(int row, int col){
+    	row--;
+    	col--;
         checkArguments(row, col);
         
-        if( !isOpen(row, col) ){ 
+        if(grid[row][col] != 1){ 
             grid[row][col] = 1; 
             
             openSites++;
@@ -66,26 +64,26 @@ public class Percolation{
             //above
             if( row==0 ){ wquuf.union(site, topVirtualSite); }
             else{
-            	if( isOpen(row-1, col) ){
+            	if(grid[row-1][col] == 1){
             		wquuf.union(site, getSite(row-1, col));
             	}
             }
             //below
             if( row==grid.length-1 ){ wquuf.union(site, bottomVirtualSite); }
             else{
-            	if( isOpen(row+1, col) ){
+            	if(grid[row+1][col] == 1){
             		wquuf.union(site, getSite(row+1, col));
             	}
             }
             //left
             if( col>0 ){
-            	if( isOpen(row, col-1) ){
+            	if(grid[row][col-1] == 1){
             		wquuf.union(site, getSite(row, col-1));
             	}
             }
             //right
             if( col<grid.length-1 ){
-            	if( isOpen(row, col+1) ){
+            	if(grid[row][col+1] == 1){
             		wquuf.union(site, getSite(row, col+1));
             	}
             }
@@ -100,7 +98,9 @@ public class Percolation{
      * @throws IllegalArgumentException unless {@code 0 <= row < n} 
      * 	or {@code 0 <= col < n}
      */
-    public boolean isOpen(int row, int col){
+    public boolean isOpen(int row, int col) {
+    	row--;
+    	col--;
         checkArguments(row, col);
         return grid[row][col] == 1;
     }
@@ -114,10 +114,12 @@ public class Percolation{
      * @throws IllegalArgumentException unless {@code 0 <= row < n} 
      * 	or {@code 0 <= col < n}
      */
-    public boolean isFull(int row, int col){
+    public boolean isFull(int row, int col) {
+    	row--;
+    	col--;
         checkArguments(row, col);
         
-        if( grid[row][col] != 0 && wquuf.connected(getSite(row, col), topVirtualSite) ){
+        if(grid[row][col] != 0 && wquuf.connected(getSite(row, col), topVirtualSite)) {
         	return true;
         }
        
@@ -128,7 +130,7 @@ public class Percolation{
      * 
      * @return number of open sites in the system
      */
-    public int numberOfOpenSites(){
+    public int numberOfOpenSites() {
         return openSites;
     }
     
@@ -136,21 +138,23 @@ public class Percolation{
      * Checks if the system percolates
      * @return
      */
-    public boolean percolates(){
+    public boolean percolates() {
         return wquuf.connected(topVirtualSite, bottomVirtualSite);
     }
     
-    /*
+   /**
      * Test client
      */
-    public static void main(String[] args){
-        
+    public static void main(String[] args) {
+    	
+        // left blank intentionally
+    	
     }  
     
-    private void checkArguments(int row, int col){
-        if( row < 0 || col < 0 || row > grid.length || col > grid.length ){
+    private void checkArguments(int row, int col) {
+        if(row < 0 || col < 0 || row > grid.length || col > grid.length) {
         	String errMsg = "Arguments out of bounds of array.";
-            throw new IllegalArgumentException( errMsg );
+            throw new IllegalArgumentException(errMsg);
         }
     }
     
@@ -160,7 +164,7 @@ public class Percolation{
      * @param col
      * @return the wquuf site corresponding to the given index in the percolation grid
      */
-    private int getSite(int row, int col){
+    private int getSite(int row, int col) {
     	return row*grid.length + col;
     }
     

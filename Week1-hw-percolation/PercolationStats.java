@@ -8,55 +8,57 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 	
-	private int[] thresholds;
+	private final double[] thresholds;
+	private static final double CONFIDENCE_95 = 1.96;
     
     public PercolationStats(int n, int trials){
-    	for( int i = 0; i < trials; i++){
-    		thresholds = new int[trials];
+   
+    	thresholds = new double[trials];
+    	for(int i = 0; i < trials; i++) {
     		
     		Percolation percolation = new Percolation(n);
     		
-    		while( ! percolation.percolates() ){
-    			percolation.open(StdRandom.uniform(n), StdRandom.uniform(n));
+    		while(!percolation.percolates()) {
+    			percolation.open(StdRandom.uniform(1,n+1), StdRandom.uniform(1,n+1));
     		}
     		
-    		thresholds[i] = percolation.numberOfOpenSites();
-    	}
-    	
+    		thresholds[i] = (double) percolation.numberOfOpenSites() / (n*n);
+    		
+    	}	
     }
     
-    public double mean(){
+    public double mean() {
     	return StdStats.mean(thresholds);
     }
     
-    public double stddev(){
+    public double stddev() {
     	return StdStats.stddev(thresholds);
     }
     
-    public double confidenceLo(){
-    	return mean() - 1.960 * (stddev() / Math.sqrt(thresholds.length));
+    public double confidenceLo() {
+    	return mean() - CONFIDENCE_95 * (stddev() / Math.sqrt(thresholds.length));
     }
     
-    public double confidenceHi(){
-    	return mean() + 1.960 * (stddev() / Math.sqrt(thresholds.length));
+    public double confidenceHi() {
+    	return mean() + CONFIDENCE_95 * (stddev() / Math.sqrt(thresholds.length));
     }
     
     
-    public static void main(String[] args){
-    	if( args.length != 2 ){
+    public static void main(String[] args) {
+    	if(args.length != 2) {
     		String errMsg = "Two arguments required: n, trials";
-    		throw new IllegalArgumentException( errMsg );
+    		throw new IllegalArgumentException(errMsg);
     	}
     	
-    	int n = Integer.parseInt( args[0] );
-    	int trials = Integer.parseInt( args[1] );
+    	int n = Integer.parseInt(args[0]);
+    	int trials = Integer.parseInt(args[1]);
     	
-    	if( n <= 0 || trials <= 0 ){
+    	if(n <= 0 || trials <= 0) {
     		String errMsg = "n and trials must be greater than 0.";
-    		throw new IllegalArgumentException( errMsg );
+    		throw new IllegalArgumentException(errMsg);
     	}
     	
-    	PercolationStats percolationStats = new PercolationStats( n, trials );
+    	PercolationStats percolationStats = new PercolationStats(n, trials);
     	
     	//Print stats
     	System.out.println("mean = " + percolationStats.mean());
